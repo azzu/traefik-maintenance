@@ -1,0 +1,37 @@
+services:
+
+  traefik:
+    image: "traefik:v3.3"
+    #image: "traefik:v2.11.22"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+      - "--experimental.localPlugins.h-filter.modulename=github.com/azzu/traefik-maintenance"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./plugins-local/:/plugins-local/"
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.whoami.middlewares=redirectall"
+      - "traefik.http.routers.whoami.middlewares=traefik-maintenance"
+      - "traefik.http.middlewares.redirectall.redirectregex.regex=^http://whoami.localhost/r/(.*)"
+      - "traefik.http.middlewares.redirectall.redirectregex.replacement=https://store.hanssem.com/$${1}"
+      - "traefik.http.middlewares.redirectall.redirectregex.permanent=false"
+      - "traefik.http.middlewares.traefik-maintenance.plugin.traefik-maintenance.enabled=true"
+      - "traefik.http.middlewares.traefik-maintenance.plugin.traefik-maintenance.file_name=./maintenance.html"
+      - "traefik.http.middlewares.traefik-maintenance.plugin.traefik-maintenance.trigger_url=http://test.localhost/m"
+      - "traefik.http.middlewares.traefik-maintenance.plugin.traefik-maintenance.http_response_code=200"
+      - "traefik.http.middlewares.traefik-maintenance.plugin.traefik-maintenance.http_content_type=text/html; charset=utf-8"
