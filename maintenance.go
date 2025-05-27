@@ -13,10 +13,10 @@ import (
 
 type Config struct {
 	Enabled          bool   `json:"enabled"`
-	FileName         string `json:"file_name"`
-	TriggerUrl       string `json:"trigger_url"`
-	HttpResponseCode int    `json:"http_response_code"`
-	HttpContentType  string `json:"http_content_type"`
+	FileName         string `json:"fileName"`
+	TriggerUrl       string `json:"triggerUrl"`
+	HttpResponseCode int    `json:"httpResponseCode"`
+	HttpContentType  string `json:"httpContentType"`
 }
 
 type MaintenancePage struct {
@@ -69,22 +69,15 @@ func (m *MaintenancePage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if resp.StatusCode == http.StatusOK {
 				w.Header().Set("Content-Type", m.httpContentType)
 				w.WriteHeader(m.httpResponseCode)
-				body, err := io.ReadAll(resp.Body)
-				if err != nil {
-					log.Printf("Error reading response body: %v", err)
-					return
-				}
-				w.Write(body)
+				io.Copy(w, resp.Body)
 				return
 			} else {
 				log.Printf("Error checking maintenance status: %v", resp.StatusCode)
-				return
 			}
 		} else {
 			bytes, err := os.ReadFile(m.fileName)
 			if err != nil {
 				log.Printf("Error reading file: %v", err)
-				return
 			}
 			w.Header().Set("Content-Type", m.httpContentType)
 			w.WriteHeader(m.httpResponseCode)
@@ -99,9 +92,10 @@ func (m *MaintenancePage) maintenanceEnabled() bool {
 		return false
 	}
 
-	if m.enabled && len(m.triggerUrl) == 0 {
+	if m.enabled && len(m.triggerUrl) > 0 {
 		return true
 	}
+
 	if _, err := os.Stat(m.fileName); err == nil {
 		return true
 	}

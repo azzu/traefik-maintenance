@@ -4,9 +4,11 @@ iconPath: .assets/icon.png
 
 import: github.com/azzu/traefik-maintenance
 
-summary: '[Demo] Add Request Header'
+summary: 'Maintenance Plugin'
 
 testData:
-  Headers:
-    X-Demo: test
-    X-URL: '{{URL}}'
+  enabled: true
+  file_name: './maintenance.html'
+  trigger_url: 'http://localhost'
+  http_response_code: 200
+  http_content-type: 'text/html; charset=utf-8'
