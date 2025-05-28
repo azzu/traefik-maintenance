@@ -1,0 +1,11 @@
+{
+    "AppInfo": {
+        "ConstructionDetail": "한샘몰 서비스 점검",
+        "ConstructionDuration": "약6시간",
+        "ConstructionEndDate": "2024년 3월 11일 06시 00분",
+        "ConstructionStartDate": "2024년 3월 11일 00시 00분",
+        "ConstructionYn": "Y"
+    },
+    "code": 10999,
+    "message": "정기 점검 기간입니다."
+}
