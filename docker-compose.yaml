@@ -46,6 +46,7 @@ services:
       - "traefik.http.middlewares.maintenance1.plugin.traefik-maintenance.triggerUrl=http://trigger.localhost"
       - "traefik.http.middlewares.maintenance1.plugin.traefik-maintenance.httpResponseCode=200"
       - "traefik.http.middlewares.maintenance1.plugin.traefik-maintenance.httpContentType=text/html; charset=utf-8"
+      - "traefik.http.middlewares.maintenance1.plugin.traefik-maintenance.whiteListIps=10.0.0.0/8,172.16.0.0/12"
       - "traefik.http.routers.whoami2.rule=Host(`whoami.localhost`) && PathPrefix(`/API`)"
       - "traefik.http.routers.whoami2.middlewares=maintenance2"
       - "traefik.http.middlewares.maintenance2.plugin.traefik-maintenance.enabled=true"
@@ -53,3 +54,4 @@ services:
       - "traefik.http.middlewares.maintenance2.plugin.traefik-maintenance.triggerUrl=http://trigger.localhost"
       - "traefik.http.middlewares.maintenance2.plugin.traefik-maintenance.httpResponseCode=200"
       - "traefik.http.middlewares.maintenance2.plugin.traefik-maintenance.httpContentType=application/json"
+      - "traefik.http.middlewares.maintenance2.plugin.traefik-maintenance.whiteListIps=192.168.0.0/16,10.0.0.0/8,172.16.0.0/12"

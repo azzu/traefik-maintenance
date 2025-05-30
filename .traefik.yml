@@ -8,7 +8,9 @@ summary: 'Maintenance Plugin'
 
 testData:
   enabled: true
-  file_name: './maintenance.html'
-  trigger_url: 'http://localhost'
-  http_response_code: 200
-  http_content-type: 'text/html; charset=utf-8'
+  fileName: './maintenance.html'
+  triggerUrl: 'http://localhost'
+  httpResponseCode: 200
+  httpContentType: 'text/html; charset=utf-8'
+  whiteListIps: '192.168.0.0/16'
+
